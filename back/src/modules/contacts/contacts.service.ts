@@ -44,8 +44,8 @@ export class ContactsService {
     }
 
     async update(updateContactDto: UpdateContactDto, id: string) {
-        const updatedContact = await this.prisma.user.update({
-            where: { id },
+        const updatedContact = await this.prisma.contact.update({
+            where: { id: id },
             data: { ...updateContactDto },
         });
 
@@ -53,11 +53,13 @@ export class ContactsService {
     }
 
     async remove(id: string) {
-        const contact = await this.prisma.user.findUnique({ where: { id } });
+        const contact = await this.prisma.contact.findUnique({
+            where: { id: id },
+        });
         if (!contact) {
             throw new NotFoundException("Contact not found");
         }
 
-        await this.prisma.user.delete({ where: { id } });
+        await this.prisma.contact.delete({ where: { id: id } });
     }
 }
