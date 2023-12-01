@@ -17,7 +17,7 @@ export class ContactsService {
         Object.assign(contact, { ...createContactDto });
 
         const contactExists = await this.prisma.contact.findFirst({
-            where: { email: createContactDto.email },
+            where: { phone: createContactDto.phone },
         });
 
         if (contactExists) {

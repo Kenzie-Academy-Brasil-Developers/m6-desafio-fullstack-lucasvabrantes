@@ -21,6 +21,15 @@ export class UsersService {
         if (findUser) {
             throw new ConflictException("User already exists");
         }
+
+        const findUserByPhone = await this.prisma.user.findFirst({
+            where: { phone: createUserDto.phone },
+        });
+
+        if (findUserByPhone) {
+            throw new ConflictException("User already exists");
+        }
+
         const user = new User();
         Object.assign(user, { ...createUserDto });
         await this.prisma.user.create({ data: { ...user } });
