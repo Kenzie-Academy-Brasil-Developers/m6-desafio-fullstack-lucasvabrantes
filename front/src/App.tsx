@@ -1,10 +1,9 @@
+import { GlobalStyle } from "./styles/GlobalStyle";
+
 export function App() {
     return (
         <>
-            <div></div>
-            <p className="read-the-docs">
-                Click on the Vite and React logos to learn more
-            </p>
+            <GlobalStyle />
         </>
     );
 }

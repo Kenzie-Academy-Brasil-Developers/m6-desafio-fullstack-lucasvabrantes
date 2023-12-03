@@ -14,8 +14,6 @@ export const GlobalStyle = createGlobalStyle`
 
     body{
         font-family:var(--font-family);
-        width:100vw;
-        height:100vh;
     }
 
 
