@@ -1,12 +1,7 @@
-import { Outlet } from "react-router-dom";
-import { useAuth } from "../hooks/useAuth";
+import { Navigate, Outlet } from "react-router-dom";
 
 export const ProtectedRoutes = () => {
-    const { loading } = useAuth();
+    const token = localStorage.getItem("@token");
 
-    if (loading) {
-        return <div>Carregando...</div>;
-    }
-
-    return <Outlet />;
+    return token ? <Outlet /> : <Navigate to="/" />;
 };

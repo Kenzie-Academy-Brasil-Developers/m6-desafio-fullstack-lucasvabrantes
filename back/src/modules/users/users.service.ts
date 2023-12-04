@@ -50,8 +50,28 @@ export class UsersService {
         return plainToInstance(User, allUsers);
     }
 
+    async findUserContacts(id: string) {
+        const userContacts = await this.prisma.user.findUnique({
+            where: { id },
+            include: {
+                contacts: true,
+            },
+        });
+
+        if (!userContacts) {
+            throw new NotFoundException("User not Found");
+        }
+
+        return userContacts.contacts;
+    }
+
     async findOne(id: string) {
-        const user = await this.prisma.user.findUnique({ where: { id } });
+        const user = await this.prisma.user.findUnique({
+            where: { id },
+            include: {
+                contacts: true,
+            },
+        });
 
         if (!user) {
             throw new NotFoundException("User not found");
