@@ -5,6 +5,7 @@ export interface IUserContext {
     setLoading: React.Dispatch<React.SetStateAction<boolean>>;
     registerUser: (formData: IRegisterUser) => Promise<void>;
     loginUser: (FormData: IUserLogin) => Promise<void>;
+    logoutUser: () => void;
 }
 
 export interface IUserProviderProps {
@@ -17,6 +18,7 @@ export interface IUser {
     email: string;
     phone: string;
     registerDate: Date;
+    contacts: [];
 }
 
 export interface IRegisterUser {
@@ -33,4 +35,5 @@ export interface IUserLogin {
 
 export interface IUserLoginResponse {
     token: string;
+    id: string;
 }

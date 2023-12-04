@@ -2,6 +2,11 @@ import { createGlobalStyle } from "styled-components";
 
 export const GlobalStyle = createGlobalStyle`
     :root{
+        --grey-100:#EBEBEB;
+        --grey-700:#2B2C28;
+        --red-400:#A40E4C;
+        --green-200:#679289;
+        --font-family:'IBM Plex Sans', sans-serif;
         --toastify-color-error:#E83F5B; 
         --toastify-color-success:#3FE864;
     }

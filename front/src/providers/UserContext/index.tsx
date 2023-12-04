@@ -21,7 +21,7 @@ export const UserProvider = ({ children }: IUserProviderProps) => {
     const registerUser = async (formData: IRegisterUser) => {
         try {
             setLoading(true);
-            const { data } = await api.post("/users", formData);
+            await api.post("/users", formData);
             toast.success("Cadastro efetuado com sucesso!");
             navigate("/");
         } catch (error) {
@@ -41,10 +41,17 @@ export const UserProvider = ({ children }: IUserProviderProps) => {
                 formData
             );
             localStorage.setItem("@token", data.token);
+            localStorage.setItem("@userId", data.id);
             toast.success("Login efetuado com sucesso!");
             navigate("/dashboard");
-            
-            const userContacts = await api.get("")
+            const headers: object = {
+                Authorization: `Bearer ${data.token}`,
+            };
+
+            const userData = await api.get<IUser>(`/users/${data.id}`, {
+                headers,
+            });
+            setUser(userData.data);
         } catch (error) {
             toast.error(
                 "Opa, algo deu errado, verifique seu login e senha estão corretos"
@@ -53,6 +60,15 @@ export const UserProvider = ({ children }: IUserProviderProps) => {
             setLoading(false);
         }
     };
+
+    const logoutUser = () => {
+        toast.success("Logout efetuado com sucesso");
+        localStorage.removeItem("@token");
+        localStorage.removeItem("@userId");
+        setUser(null);
+        navigate("/");
+    };
+
     return (
         <UserContext.Provider
             value={{
@@ -62,6 +78,7 @@ export const UserProvider = ({ children }: IUserProviderProps) => {
                 setLoading,
                 registerUser,
                 loginUser,
+                logoutUser,
             }}
         >
             {children}
