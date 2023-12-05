@@ -50,4 +50,8 @@ pnpm dev
 
 ---
 
-Realizadas as instruções acima, a aplicação está pronta para ser testada.
+### DOCUMENTAÇÃO :orange_book:
+
+As rotas desta aplicação foram documentadas usando a biblioteca Swagger. Para visualização e maior detalhes quanto aos endpoints, corpo de requisição e rotas protegidas, acesse localmente:
+
+## http://localhost:3000/api
