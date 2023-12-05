@@ -28,19 +28,18 @@ export const UserProvider = ({ children }: IUserProviderProps) => {
         const token = localStorage.getItem("@token");
         const userId = localStorage.getItem("@userId");
         const loadUserData = async () => {
-            if (token && userId) {
-                const headers: object = {
-                    Authorization: `Bearer ${token}`,
-                };
-                const userData = await api.get<IUser>(`/users/${userId}`, {
-                    headers,
-                });
-                setUser(userData.data);
-                setContactsList(userData.data.contacts);
-            }
+            const headers: object = {
+                Authorization: `Bearer ${token}`,
+            };
+            const userData = await api.get<IUser>(`/users/${userId}`, {
+                headers,
+            });
+            setUser(userData.data);
+            setContactsList(userData.data.contacts);
         };
-        loadUserData();
-    }, []);
+
+        if (token && userId) loadUserData();
+    }, [user]);
 
     const registerUser = async (formData: IRegisterUser) => {
         try {

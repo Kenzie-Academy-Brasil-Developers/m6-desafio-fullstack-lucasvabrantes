@@ -10,7 +10,7 @@ import { Input } from "../Input";
 import { StyledForm } from "../../styles/Form";
 
 export const ModalAddContact = () => {
-    const { setIsAddModalOpen, object, addContact } = useContext(UserContext);
+    const { setIsAddModalOpen, addContact } = useContext(UserContext);
     const {
         register,
         handleSubmit,
@@ -47,7 +47,7 @@ export const ModalAddContact = () => {
                         <Input
                             label="Telefone"
                             type="text"
-                            placeholder="Digite um núemero de telefone"
+                            placeholder="Digite um número de telefone"
                             {...register("phone")}
                             error={errors.phone}
                         />
