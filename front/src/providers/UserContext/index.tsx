@@ -1,5 +1,7 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import {
+    IContact,
+    IContactRegister,
     IRegisterUser,
     IUser,
     IUserContext,
@@ -17,6 +19,28 @@ export const UserProvider = ({ children }: IUserProviderProps) => {
     const navigate = useNavigate();
     const [user, setUser] = useState<IUser | null>(null);
     const [loading, setLoading] = useState(false);
+    const [contactsList, setContactsList] = useState<IContact[] | []>([]);
+    const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [object, setObject] = useState<IContact | null>(null);
+
+    useEffect(() => {
+        const token = localStorage.getItem("@token");
+        const userId = localStorage.getItem("@userId");
+        const loadUserData = async () => {
+            if (token && userId) {
+                const headers: object = {
+                    Authorization: `Bearer ${token}`,
+                };
+                const userData = await api.get<IUser>(`/users/${userId}`, {
+                    headers,
+                });
+                setUser(userData.data);
+                setContactsList(userData.data.contacts);
+            }
+        };
+        loadUserData();
+    }, []);
 
     const registerUser = async (formData: IRegisterUser) => {
         try {
@@ -69,6 +93,66 @@ export const UserProvider = ({ children }: IUserProviderProps) => {
         navigate("/");
     };
 
+    const addContact = async (formData: IContactRegister) => {
+        const token = localStorage.getItem("@token");
+        try {
+            const { data } = await api.post("/contacts", formData, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            toast.success("Contato adicionado com sucesso!");
+            setContactsList([...contactsList, data]);
+            setIsAddModalOpen(false);
+        } catch (error) {
+            toast.error("Erro!");
+        }
+    };
+
+    const editContact = async (formData: IContactRegister) => {
+        const token = localStorage.getItem("@token");
+        const contactId = object?.id;
+
+        try {
+            const { data } = await api.patch(
+                `/contacts/${contactId}`,
+                formData,
+                { headers: { Authorization: `Bearer ${token}` } }
+            );
+
+            const newContactsList = contactsList.map((contact) => {
+                if (contact.id === contactId) {
+                    return data;
+                } else {
+                    return contact;
+                }
+            });
+
+            toast.success("Contato atualizado com sucesso");
+            setContactsList(newContactsList);
+            setIsEditModalOpen(false);
+        } catch (error) {
+            toast.error("Erro!");
+        }
+    };
+
+    const deleteContact = async (contactId: string) => {
+        const token = localStorage.getItem("@token");
+
+        try {
+            await api.delete(`/contacts/${contactId}`, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            const newContactsList = contactsList.filter(
+                ({ id }) => id !== contactId
+            );
+            setContactsList(newContactsList);
+            toast.success("Contato deletado com sucesso");
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
     return (
         <UserContext.Provider
             value={{
@@ -79,6 +163,17 @@ export const UserProvider = ({ children }: IUserProviderProps) => {
                 registerUser,
                 loginUser,
                 logoutUser,
+                addContact,
+                editContact,
+                deleteContact,
+                contactsList,
+                setContactsList,
+                isAddModalOpen,
+                isEditModalOpen,
+                setIsAddModalOpen,
+                setIsEditModalOpen,
+                object,
+                setObject,
             }}
         >
             {children}

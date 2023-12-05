@@ -22,7 +22,6 @@ export const Login = () => {
     });
 
     const submit = (formData: IUserLogin) => {
-        console.log(formData);
         loginUser(formData);
     };
 
