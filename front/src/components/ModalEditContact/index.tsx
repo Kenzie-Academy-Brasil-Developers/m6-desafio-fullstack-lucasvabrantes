@@ -34,21 +34,21 @@ export const ModalEditContact = () => {
                         <Input
                             type="text"
                             label="Nome"
-                            placeholder={object?.name}
+                            defaultValue={object?.name}
                             {...register("name")}
                             error={errors.name}
                         />
                         <Input
                             label="E-mail"
                             type="email"
-                            placeholder={object?.email}
+                            defaultValue={object?.email}
                             {...register("email")}
                             error={errors.email}
                         />
                         <Input
                             label="Telefone"
                             type="text"
-                            placeholder={object?.phone}
+                            defaultValue={object?.phone}
                             {...register("phone")}
                             error={errors.phone}
                         />
